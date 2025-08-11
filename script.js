@@ -1,10 +1,13 @@
 class DragAndDrop {
   selectors = {
     root: '[data-js-dnd]',
+    cat: '[data-js-dnd-cat]',
+    modal: '[data-js-dnd-modal]',
   }
 
   stateClasses = {
     idDragging: 'is-dragging',
+    isVisible: 'is-visible',
   }
 
   initialState = {
@@ -15,6 +18,8 @@ class DragAndDrop {
   }
 
   constructor() {
+    this.catElement = document.querySelector(this.selectors.cat)
+    this.modalElement = document.querySelector(this.selectors.modal)
     this.state = { ...this.initialState }
     this.bindEvents()
   }
@@ -43,6 +48,30 @@ class DragAndDrop {
     }
   }
 
+  showModal() {
+    this.modalElement.classList.add(this.stateClasses.isVisible)
+  }
+
+  hideModal() {
+    this.modalElement.classList.remove(this.stateClasses.isVisible)
+  }
+
+  checkCat(pageX, pageY) {
+    if (!this.state.isDragging) {
+      return
+    }
+
+    const { left, top } = this.catElement.getBoundingClientRect()
+    const draggingElementOnStaticElement = pageX >= left && pageY >= top
+
+    if (draggingElementOnStaticElement) {
+      console.log('Yes')
+      this.showModal()
+    } else {
+      this.hideModal()
+    }
+  }
+
   onPointerMove(event) {
     if (!this.state.isDragging) {
       return
@@ -53,6 +82,8 @@ class DragAndDrop {
 
     this.state.currentDraggingElement.style.left = `${x}px`
     this.state.currentDraggingElement.style.top = `${y}px`
+
+    this.checkCat(event.pageX, event.pageY)
   }
 
   onPointerUp() {

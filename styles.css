@@ -39,6 +39,25 @@ img {
   width: 25vw;
 }
 
+.modal {
+  position: absolute;
+  left: 50%;
+  translate: -50%;
+  bottom: 2%;
+  text-align: center;
+  width: 25vw;
+  background-color: greenyellow;
+  border: 2px solid green;
+  border-radius: 50px;
+  transition-duration: 0.5s;
+
+  &:not(.is-visible) {
+    translate: -50% 50vw;
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
 .draggable {
   position: absolute;
   z-index: 1;
