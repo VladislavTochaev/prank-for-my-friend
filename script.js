@@ -45,11 +45,20 @@ class DragAndDrop {
       offsetY: y - top,
       isDragging: true,
       currentDraggingElement: target,
+      checkStateModalElement: false,
     }
   }
 
   showModal() {
     this.modalElement.classList.add(this.stateClasses.isVisible)
+  }
+
+  hideModalOnSetTimeOut(ms = 2) {
+    const second = ms * 1000
+
+    setTimeout(() => {
+        this.hideModal()
+      }, second)
   }
 
   hideModal() {
@@ -66,9 +75,20 @@ class DragAndDrop {
 
     if (draggingElementOnStaticElement) {
       console.log('Yes')
+      this.state.checkStateModalElement = true
+      this.modalElement.textContent = 'Алес кайфует 😏'
       this.showModal()
-    } else {
-      this.hideModal()
+      this.hideModalOnSetTimeOut()
+    }
+
+    if (this.state.checkStateModalElement) {
+      if(!draggingElementOnStaticElement) {
+        console.log('ahhh')
+        this.modalElement.textContent = 'Алес расстроен 😭'
+        this.showModal()
+        this.hideModalOnSetTimeOut()
+        this.state.checkStateModalElement = false
+      }
     }
   }
 
@@ -83,7 +103,7 @@ class DragAndDrop {
     this.state.currentDraggingElement.style.left = `${x}px`
     this.state.currentDraggingElement.style.top = `${y}px`
 
-    this.checkCat(event.pageX, event.pageY)
+    this.checkCat(event.pageX, event.pageY)    
   }
 
   onPointerUp() {
